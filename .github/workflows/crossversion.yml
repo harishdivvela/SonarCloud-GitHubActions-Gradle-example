@@ -1,0 +1,38 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CrossVersion - SonarCloud GitHub Actions with Gradle
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: '*'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # test against latest update of each major Java version
+        # gradle does not support Java 14 until version 6.3
+        java: [ 8, 11 ]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    name: ${{ matrix.os }} - Java ${{ matrix.java }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Gradle build
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: --refresh-dependencies --stacktrace --scan clean build
+      - name: Sonarqube
+        env:
+          SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
+        # this GitHub action will only execute the analyses on one java version
+        # and for one OS - as it is normally not needed to do code analyses and
+        # test reports for multiple OS and JDK versions. (opinionated)
+        if:  matrix.java == '8' && matrix.os == 'ubuntu-latest'
+        run: ./gradlew jacocoTestReport sonarqube --stacktrace -i
