@@ -1,0 +1,58 @@
+import groovy.json.JsonSlurper
+
+
+plugins {
+	id 'java'
+	id 'jacoco'
+	id 'eclipse' // optional (to generate Eclipse project files)
+	id 'idea' // optional (to generate IntelliJ IDEA project files)
+    id "org.sonarqube" version "2.8"
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testImplementation('org.junit.jupiter:junit-jupiter:5.6.0')
+}
+
+sonarqube {
+    properties {
+        /*
+        UPDATE SECTION START
+        Please fill in your data
+         */
+        property "sonar.projectName", "SonarCloud Github Actions with gradle"
+        property "sonar.projectKey", "aepfli_SonarCloud-GitHubActions-Gradle-example"
+        property "sonar.organization", "aepfli"
+        /*
+        UPDATE SECTION END
+         */
+        property "sonar.host.url", "https://sonarcloud.io"
+/* 
+        property "sonar.login", System.getenv("SONAR_LOGIN")
+
+        if (System.getenv("GITHUB_EVENT_NAME") == "pull_request") {
+            def githubPath = System.getenv("GITHUB_EVENT_PATH")
+            if (githubPath != null) {
+                def fromJson = new JsonSlurper().parseText(json).number
+
+                property("sonar.pullrequest.key", "${fromJson}")
+                property("sonar.pullrequest.branch", System.getenv("GITHUB_HEAD_REF") ?: "")
+                property("sonar.pullrequest.base", System.getenv("GITHUB_BASE_REF") ?: "")
+                property("sonar.pullrequest.provider", "GitHub")
+                property("sonar.pullrequest.github.repository", System.getenv("GITHUB_REPOSITORY") ?: "")
+
+            }
+        } else {
+            property("sonar.branch.name", System.getenv("GITHUB_HEAD_REF") ?: "")
+        }*/
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+    }
+}
