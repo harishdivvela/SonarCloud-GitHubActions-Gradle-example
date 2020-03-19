@@ -30,7 +30,8 @@ jobs:
           arguments: --refresh-dependencies --stacktrace --scan clean build
       - name: Sonarqube
         env:
-          SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         # this GitHub action will only execute the analyses on one java version
         # and for one OS - as it is normally not needed to do code analyses and
         # test reports for multiple OS and JDK versions. (opinionated)
