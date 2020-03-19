@@ -38,24 +38,6 @@ sonarqube {
          */
         property "sonar.host.url", "https://sonarcloud.io"
 
-        property "sonar.login", System.getenv("SONAR_TOKEN")
-
-        if (System.getenv("GITHUB_EVENT_NAME") == "pull_request") {
-            def githubPath = System.getenv("GITHUB_EVENT_PATH")
-            if (githubPath != null) {
-                def fromJson = new JsonSlurper().parseText(json).number
-
-                println fromJson
-                property("sonar.pullrequest.key", "${fromJson}")
-                property("sonar.pullrequest.branch", System.getenv("GITHUB_HEAD_REF") ?: "")
-                property("sonar.pullrequest.base", System.getenv("GITHUB_BASE_REF") ?: "")
-                property("sonar.pullrequest.provider", "GitHub")
-                property("sonar.pullrequest.github.repository", System.getenv("GITHUB_REPOSITORY") ?: "")
-
-            }
-        } else {
-            property("sonar.branch.name", System.getenv("GITHUB_HEAD_REF") ?: "")
-        }
     }
 }
 
