@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: SonarCloud GitHub Actions with Gradle
 
 on:
@@ -9,7 +7,7 @@ on:
       - harish-new     # Trigger on harish-new branch
   pull_request:
     branches: 
-      - '*'           
+      - '*'            # Trigger on any branch for pull requests
 
 jobs:
   build:
@@ -29,7 +27,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew jacocoTestReport sonarqube \
-          -Dsonar.branch.name=${{ github.ref_name }} \
-          -Dsonar.scm.revision=${{ github.sha }} \
-          --stacktrace -i
+        run: ./gradlew -Dsonar.branch.name=${{ github.ref_name }} -Dsonar.scm.revision=${{ github.sha }} jacocoTestReport sonarqube --stacktrace -i
