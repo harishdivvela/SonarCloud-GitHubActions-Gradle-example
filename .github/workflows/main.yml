@@ -9,7 +9,7 @@ on:
       - harish-new     # Trigger on harish-new branch
   pull_request:
     branches: 
-      - '*'            # Trigger on any branch for pull requests
+      - '*'           
 
 jobs:
   build:
